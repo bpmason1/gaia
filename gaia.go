@@ -29,7 +29,7 @@ func GetInteger(envStr string) (int, error) {
 
 func GetIntegerWithDefault(envStr string, defaultInt int) int {
     val, err := GetInteger(envStr)
-    if err := nil {
+    if err != nil {
         return defaultInt
     }
     return val
@@ -37,7 +37,7 @@ func GetIntegerWithDefault(envStr string, defaultInt int) int {
 
 func GetPort(envStr string) (int, error) {
     port, err := GetInteger(envStr)
-    if err := nil {
+    if err != nil {
         return INVALID_PORT, err
     }
 
