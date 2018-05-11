@@ -35,3 +35,11 @@ func GetPort(envStr string) (int, error) {
     }
     return port, nil
 }
+
+func GetPortWithDefault(envStr string, defaultPort int) int {
+    port, err := GetPort(envStr)
+    if err != nil {
+        return defaultPort
+    }
+    return port
+}
