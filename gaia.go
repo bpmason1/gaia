@@ -48,7 +48,7 @@ func GetPortWithDefault(envStr string, defaultPort int) int {
 func GetPortOrDie(envStr string) int {
     port, err := GetPort(envStr)
     if err != nil {
-        log.Fatalf("Fatal error ... missing environment %s\n", envStr)
+        log.Fatalf(err)
         os.Exit(-1)
     }
     return port
