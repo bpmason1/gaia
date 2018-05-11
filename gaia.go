@@ -12,17 +12,33 @@ const INVALID_PORT = -1
 const MIN_PORT = 1
 const MAX_PORT = 65535
 
-func GetPort(envStr string) (int, error) {
-  portStr, found := os.LookupEnv(envStr)
-    if !found  {
-        msg := fmt.Sprintf("Porter ... unset enviroment variable %s", portStr)
-        return INVALID_PORT, errors.New(msg)
+func GetInteger(envStr string) (int, error) {
+    intStr, found := os.LookupEnv(envStr)
+    if !found {
+        msg := fmt.Sprintf("Unset enviroment variable %s", envStr)
+        return 0, errors.New(msg)
     }
 
-    port, err := strconv.Atoi(portStr)
+    num, err := strconv.Atoi(intStr)
     if err != nil {
-        msg := fmt.Sprintf("Porter ... non-integer port %s for environment %s", portStr, envStr)
-        return INVALID_PORT, errors.New(msg)
+        msg := fmt.Sprintf("Non-integer value %s for environment %s", intStr, envStr)
+        return 0, errors.New(msg)
+    }
+    return num, nil
+}
+
+func GetIntegerWithDefault(envStr string, defaultInt int) int {
+    val, err := GetInteger(envStr)
+    if err := nil {
+        return defaultInt
+    }
+    return val
+}
+
+func GetPort(envStr string) (int, error) {
+    port, err := GetInteger(envStr)
+    if err := nil {
+        return INVALID_PORT, err
     }
 
     if port < MIN_PORT {
