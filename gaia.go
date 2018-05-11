@@ -3,6 +3,7 @@ package gaia
 import (
     "errors"
     "fmt"
+    "log"
     "os"
     "strconv"
 )
@@ -40,6 +41,15 @@ func GetPortWithDefault(envStr string, defaultPort int) int {
     port, err := GetPort(envStr)
     if err != nil {
         return defaultPort
+    }
+    return port
+}
+
+func GetPortOrDie(envStr string) int {
+    port, err := GetPort(envStr)
+    if err != nil {
+        log.Fatalf("Fatal error ... missing environment %s\n", envStr)
+        os.Exit(-1)
     }
     return port
 }
