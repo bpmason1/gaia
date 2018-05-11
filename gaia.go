@@ -11,7 +11,7 @@ const INVALID_PORT = -1
 const MIN_PORT = 1
 const MAX_PORT = 65535
 
-func GetPortFromEnv(envStr string) (int, error) {
+func GetPort(envStr string) (int, error) {
   portStr, found := os.LookupEnv(envStr)
     if !found  {
         msg := fmt.Sprintf("Porter ... unset enviroment variable %s", portStr)
