@@ -12,6 +12,16 @@ const INVALID_PORT = -1
 const MIN_PORT = 1
 const MAX_PORT = 65535
 
+func GetEnvOrDie(envStr string) string {
+    value, found := os.LookupEnv(envStr)
+    if !found {
+        msg := fmt.Sprintf("Missing required enviroment variable %s", envStr)
+        log.Fatal(msg)
+        os.Exit(-1)
+    }
+    return value
+}
+
 func GetInteger(envStr string) (int, error) {
     intStr, found := os.LookupEnv(envStr)
     if !found {
