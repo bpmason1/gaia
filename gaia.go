@@ -66,6 +66,8 @@ func GetPort(envStr string) (int, error) {
 func GetPortWithDefault(envStr string, defaultPort int) int {
     port, err := GetPort(envStr)
     if err != nil {
+        log.Println(err)
+        log.Println("Warning - using default port")
         return defaultPort
     }
     return port
