@@ -22,6 +22,16 @@ func GetEnvOrDie(envStr string) string {
     return value
 }
 
+func GetEnvWithDefault(envStr, defaultStr string) string {
+    value, found := os.LookupEnv(envStr)
+    if !found {
+        msg := fmt.Sprintf("Missing enviroment variable %s ... using default %s\n", envStr, defaultStr)
+        log.Println(msg)
+        return defaultStr
+    }
+    return value
+}
+
 func GetInteger(envStr string) (int, error) {
     intStr, found := os.LookupEnv(envStr)
     if !found {
