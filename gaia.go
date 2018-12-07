@@ -55,22 +55,26 @@ func GetIntegerWithDefault(envStr string, defaultInt int) int {
     return val
 }
 
+func GetIntegerInRange(envStr string, minInt, maxInt int) (int, error) {
+  num, err := GetInteger(envStr)
+  if err != nil {
+      return 0, err
+  }
+
+  if num < minInt {
+      msg := fmt.Sprintf("Value %d is below min port %d", num, minInt)
+      return 0, errors.New(msg)
+  }
+
+  if num > maxInt {
+      msg := fmt.Sprintf("Value %d is above max port %d", num, maxInt)
+      return 0, errors.New(msg)
+  }
+  return num, nil
+}
+
 func GetPort(envStr string) (int, error) {
-    port, err := GetInteger(envStr)
-    if err != nil {
-        return INVALID_PORT, err
-    }
-
-    if port < MIN_PORT {
-        msg := fmt.Sprintf("Port value %d is below min port %d", port, MIN_PORT)
-        return INVALID_PORT, errors.New(msg)
-    }
-
-    if port > MAX_PORT {
-        msg := fmt.Sprintf("Port value %d is above max port %d", port, MAX_PORT)
-        return INVALID_PORT, errors.New(msg)
-    }
-    return port, nil
+    return GetIntegerInRange(envStr, MIN_PORT, MAX_PORT)
 }
 
 func GetPortWithDefault(envStr string, defaultPort int) int {
