@@ -49,6 +49,64 @@ func TestMaxPort(t *testing.T) {
     }
 }
 
+func TestGetIntegerInRange_Valid(t *testing.T) {
+  testIt := func(minInt, maxInt int, validInputs []int) {
+    for _, envValue := range validInputs {
+      envName := GetUnusedEnv()
+      defer os.Unsetenv(envName)  // call is safe even if the env isn't set
+      os.Setenv(envName, strconv.Itoa(envValue))
+
+      i, err := GetIntegerInRange(envName, minInt, maxInt)
+      if err != nil {
+        t.Error(err)
+      }
+
+      if i != envValue {
+        t.Errorf("GetIntegerInRange returned %d ... should be %d", i, envValue)
+      }
+    }
+  }
+
+  testIt(-10, 10, []int{-10, -9, 0, 1, 7, 10})
+  testIt(0, 1000, []int{0, 9, 0, 1, 7, 50, 99, 100, 500, 1000})
+  testIt(42, 42, []int{42})
+}
+
+func TestGetIntegerInRange_InvalidNotInt(t *testing.T) {
+  testIt := func(minInt, maxInt int, invalidInputs []string) {
+    for _, envValue := range invalidInputs {
+      envName := GetUnusedEnv()
+      defer os.Unsetenv(envName)  // call is safe even if the env isn't set
+      os.Setenv(envName, envValue)
+
+      i, err := GetIntegerInRange(envName, minInt, maxInt)
+      if err == nil {
+        t.Errorf("Non-integer %s incorrectly returned int %d", envValue, i)
+      }
+    }
+  }
+
+  testIt(-10, 10, []string{"1.0", "0.0", "-1.2", "kitten", "", "_", "\"1\""})
+}
+
+func TestGetIntegerInRange_InvalidNotInRange(t *testing.T) {
+  testIt := func(minInt, maxInt int, invalidInputs []int) {
+    for _, envValue := range invalidInputs {
+      envName := GetUnusedEnv()
+      defer os.Unsetenv(envName)  // call is safe even if the env isn't set
+      os.Setenv(envName, strconv.Itoa(envValue))
+
+      _, err := GetIntegerInRange(envName, minInt, maxInt)
+      if err == nil {
+        t.Errorf("Integer %d is not within range [%d, %d]", envValue, minInt, maxInt)
+      }
+    }
+  }
+
+  testIt(-10, 20, []int{-100, -21, -20, -11, 21, 100})
+  testIt(-20, 10, []int{-100, -21, 11, 12, 100})
+}
+
 func TestGetEnvWithDefault(t *testing.T) {
     envName := GetUnusedEnv()
     defaultValue := "mock-default"
