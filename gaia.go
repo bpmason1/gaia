@@ -32,6 +32,19 @@ func GetEnvWithDefault(envStr, defaultStr string) string {
     return value
 }
 
+func GetDirectoryNameOrDie(envStr string) string {
+  dirname := GetEnvOrDie(envStr)
+  fileInfo, err := os.Stat(dirname)
+  if err != nil {
+    log.Println(err)
+    os.Exit(-1)
+  } else if(fileInfo.IsDir() == false) {
+    log.Println(dirname, "exists but is not a directory")
+    os.Exit(-1)
+  }
+  return dirname
+}
+
 func GetInteger(envStr string) (int, error) {
     intStr, found := os.LookupEnv(envStr)
     if !found {
