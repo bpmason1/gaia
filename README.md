@@ -12,7 +12,7 @@ The gaia library is intended as a way to minimize writing boilerplate code when 
 * GetInteger(envStr string) (int, error)
 * GetIntegerWithDefault(envStr string, defaultInt int) int
 * GetIntegerInRange(envStr string, minInt, maxInt int) (int, error) ... (the valid range is inclusive of both maxInt and minInt)
-* GetPort(envStr string) (int, error) ... (an error will be raised if the port number is outsie the range 1 to 65535)
+* GetPort(envStr string) (int, error) ... (an error will be raised if the port number is outside the range 1 to 65535)
 * GetPortWithDefault(envStr string, defaultPort int) int
 * GetPortOrDie(envStr string) int
 
