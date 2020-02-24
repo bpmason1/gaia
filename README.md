@@ -17,3 +17,32 @@ The gaia library is intended as a way to minimize writing boilerplate code when 
 * GetPortOrDie(envStr string) int
 
 In all cases, the function parameter `envStr` is the name of the environmnt variable.
+
+## Example
+from the command line (assumes you are using bash)  
+`export YourEnvVar=25`
+
+then create a main.go with the following content  
+```
+package main
+
+import (
+  "fmt"
+  "github.com/bpmason1/gaia"
+)
+
+func main() {
+  fmt.Println("Hello")
+
+  minInt := 20
+  maxInt := 30
+  i, err := GetIntegerInRange("YourEnvVar", minInt, maxInt)
+
+  if err != nil {
+    fmt.Println(err)
+  } else {
+    fmt.Println("Success ... %d is in the range %d to %d", i, minInt, maxInt)
+  }
+}
+```  
+This simple example shows gaia's ability to verify not only that the integer in the environment variable is within bounds but to also perform the initial type casting to ensure the input string can be turned into in integer at all.
